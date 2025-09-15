@@ -1,0 +1,3 @@
+dependencies:
+  esp-pid-control:
+    git: https://github.com/felipegtralli/esp-pid-control.git

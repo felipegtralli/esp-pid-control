@@ -1,0 +1,10 @@
+menu "PID Control Configuration"
+
+    config PID_CONTROL_LOGGING
+        bool "Enable PID control logging"
+        default false
+        help
+            Enable this option to log PID control operations for debugging purposes.
+            Note that enabling logging may impact performance and increase memory usage.
+
+endmenu

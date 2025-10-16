@@ -102,12 +102,14 @@ static void pid_apply_config(struct pid_control* ctrl, const pid_control_config*
 }
 
 // update helpers
+#if !CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
 static esp_err_t pid_validate_update_args(float setpoint, float measurement) {
     if(!is_finite(setpoint) || !is_finite(measurement)) {
         return ESP_ERR_INVALID_ARG;
     }
     return ESP_OK;
 }
+#endif // CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
 
 // dU(z) = Kp * (1 - z^-1)E(z) + Ki * E(z) + Kd * (1 - 2z^-1 + z^-2)E(z) + back-calculation
 static struct pid_result pid_compute_incremental(const struct pid_control* ctrl, float setpoint, float measurement) {

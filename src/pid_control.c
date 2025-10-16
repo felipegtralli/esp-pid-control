@@ -226,21 +226,26 @@ esp_err_t pid_control_init(void* storage, size_t storage_size, pid_control_handl
 
 esp_err_t pid_control_update(pid_control_handle handle, float setpoint, float measurement, float* u_out) {
     esp_err_t status = ESP_OK;
-    if(handle == NULL || u_out == NULL) {
-        #if CONFIG_PID_CONTROL_LOGGING
-            ESP_LOGE(TAG, "Invalid argument: NULL pointer");
-        #endif
-        status = ESP_ERR_INVALID_ARG;
-    }
 
-    if(status == ESP_OK) {
-        status = pid_validate_update_args(setpoint, measurement);
-        if(status != ESP_OK) {
+    #if !CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
+
+        if(handle == NULL || u_out == NULL) {
             #if CONFIG_PID_CONTROL_LOGGING
-                ESP_LOGE(TAG, "Invalid argument: invalid setpoint or measurement");
+                ESP_LOGE(TAG, "Invalid argument: NULL pointer");
             #endif
+            status = ESP_ERR_INVALID_ARG;
         }
-    }
+
+        if(status == ESP_OK) {
+            status = pid_validate_update_args(setpoint, measurement);
+            if(status != ESP_OK) {
+                #if CONFIG_PID_CONTROL_LOGGING
+                    ESP_LOGE(TAG, "Invalid argument: invalid setpoint or measurement");
+                #endif
+            }
+        }
+        
+    #endif // CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
 
     if(status == ESP_OK) {
         struct pid_control* ctrl = handle;

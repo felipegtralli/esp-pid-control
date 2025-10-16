@@ -7,4 +7,12 @@ menu "PID Control Configuration"
             Enable this option to log PID control operations for debugging purposes.
             Note that enabling logging may impact performance and increase memory usage.
 
+    config PID_CONTROL_IGNORE_UPDATE_CHECKS
+        bool "Ignore arguments checks in pid_control_update()"
+        default false
+        help
+            Enable this option to skip argument validation in the pid_control_update() function.
+            This may improve performance but could lead to undefined behavior if invalid arguments are passed.
+            Should only be used in critical performance scenarios where the caller guarantees argument validity.
+
 endmenu

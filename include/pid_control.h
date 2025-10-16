@@ -99,6 +99,8 @@ esp_err_t pid_control_init(void* storage, size_t storage_size, pid_control_handl
  * @note Uses the incremental PID formula with back-calculation for anti-windup.
  * @note If kaw is set to 0, back-calculation is disabled and the controller behaves as a standard PID.
  * @note This function is not thread-safe; external synchronization is required if used concurrently.
+ * @note Argument validation can be disabled at build time by enabling CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
+ *       in Kconfig. When disabled, the caller is responsible for ensuring all arguments are valid.
  */
 esp_err_t pid_control_update(pid_control_handle handle, float setpoint, float measurement, float* u_out);
 

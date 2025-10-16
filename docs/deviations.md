@@ -3,7 +3,6 @@
 
 ## Project: esp-pid-control
 ## Module: pid_control
-## Date: 2025-09-15
 
 This document formally records all known deviations from the MISRA C:2012 standard within the `pid_control` library. Each deviation is identified by rule number, with a summary, precise code location, rationale, and any relevant risk mitigation or safety considerations. This report is intended to support code reviews, audits, and compliance documentation.
 

@@ -12,6 +12,8 @@
 
 /* MISRA C:2012 Dir 1.1 note: Project may build with GNU dialect via ESP-IDF; this module avoids GNU-only constructs. */
 
+#define PID_SECOND_DIFF_COEFF 2.0f
+
 struct clamp_range {
     float min;
     float max;
@@ -103,23 +105,23 @@ static void pid_apply_config(struct pid_control* ctrl, const pid_control_config*
 
 // update helpers
 #if !CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
+
 static esp_err_t pid_validate_update_args(float setpoint, float measurement) {
     if(!is_finite(setpoint) || !is_finite(measurement)) {
         return ESP_ERR_INVALID_ARG;
     }
     return ESP_OK;
 }
+
 #endif // CONFIG_PID_CONTROL_IGNORE_UPDATE_CHECKS
 
 // dU(z) = Kp * (1 - z^-1)E(z) + Ki * E(z) + Kd * (1 - 2z^-1 + z^-2)E(z) + back-calculation
 static struct pid_result pid_compute_incremental(const struct pid_control* ctrl, float setpoint, float measurement) {
-    static const float pid_second_diff_coeff = 2.0f;
-    
     const float err = setpoint - measurement;
 
     const float du_p = ctrl->kp * (err - ctrl->prev_err);
     const float du_i = ctrl->ki * err;
-    const float du_d = ctrl->kd * (err - (pid_second_diff_coeff * ctrl->prev_err) + ctrl->prev_err2);
+    const float du_d = ctrl->kd * (err - (PID_SECOND_DIFF_COEFF * ctrl->prev_err) + ctrl->prev_err2);
 
     const struct clamp_range range = { .min = ctrl->u_min, .max = ctrl->u_max };
     const float u_unsat = ctrl->last_u + du_p + du_i + du_d;

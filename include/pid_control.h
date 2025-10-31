@@ -167,6 +167,53 @@ esp_err_t pid_control_set_anti_windup(pid_control_handle handle, float kaw);
  */
 esp_err_t pid_control_set_output_limits(pid_control_handle handle, float u_min, float u_max);
 
+/**
+ * @brief Get the current PID gains from the controller.
+ *
+ * @param[in]  handle PID controller handle.
+ * @param[out] kp     Pointer to store the proportional gain.
+ * @param[out] ki     Pointer to store the integral gain.
+ * @param[out] kd     Pointer to store the derivative gain.
+ *
+ * @retval ESP_OK              Success.
+ * @retval ESP_ERR_INVALID_ARG If any argument is NULL or invalid.
+ */
+esp_err_t pid_control_get_gains(pid_control_handle handle, float* kp, float* ki, float* kd);
+
+/**
+ * @brief Get the current anti-windup gain (kaw) from the controller.
+ *
+ * @param[in]  handle PID controller handle.
+ * @param[out] kaw    Pointer to store the anti-windup gain.
+ *
+ * @retval ESP_OK              Success.
+ * @retval ESP_ERR_INVALID_ARG If any argument is NULL or invalid.
+ */
+esp_err_t pid_control_get_anti_windup(pid_control_handle handle, float* kaw);
+
+/**
+ * @brief Get the current output limits from the controller.
+ *
+ * @param[in]  handle PID controller handle.
+ * @param[out] u_min  Pointer to store the minimum output value.
+ * @param[out] u_max  Pointer to store the maximum output value.
+ *
+ * @retval ESP_OK              Success.
+ * @retval ESP_ERR_INVALID_ARG If any argument is NULL or invalid.
+ */
+esp_err_t pid_control_get_output_limits(pid_control_handle handle, float* u_min, float* u_max);
+
+/**
+ * @brief Get the full configuration of the PID controller.
+ *
+ * @param[in]  handle PID controller handle.
+ * @param[out] config Pointer to store the configuration structure.
+ *
+ * @retval ESP_OK              Success.
+ * @retval ESP_ERR_INVALID_ARG If any argument is NULL or invalid.
+ */
+esp_err_t pid_control_get_config(pid_control_handle handle, pid_control_config* config);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

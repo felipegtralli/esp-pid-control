@@ -371,3 +371,79 @@ esp_err_t pid_control_set_output_limits(pid_control_handle handle, float u_min, 
 
     return status;
 }
+
+esp_err_t pid_control_get_gains(pid_control_handle handle, float* kp, float* ki, float* kd) {
+    esp_err_t status = ESP_OK;
+    if(handle == NULL || kp == NULL || ki == NULL || kd == NULL) {
+        #if CONFIG_PID_CONTROL_LOGGING
+            ESP_LOGE(TAG, "Invalid argument: NULL pointer");
+        #endif
+        status = ESP_ERR_INVALID_ARG;
+    }
+
+    if(status == ESP_OK) {
+        struct pid_control* ctrl = handle;
+        *kp = ctrl->kp;
+        *ki = ctrl->ki;
+        *kd = ctrl->kd;
+    }
+
+    return status;
+}
+
+esp_err_t pid_control_get_anti_windup(pid_control_handle handle, float* kaw) {
+    esp_err_t status = ESP_OK;
+    if(handle == NULL || kaw == NULL) {
+        #if CONFIG_PID_CONTROL_LOGGING
+            ESP_LOGE(TAG, "Invalid argument: NULL pointer");
+        #endif
+        status = ESP_ERR_INVALID_ARG;
+    }
+
+    if(status == ESP_OK) {
+        struct pid_control* ctrl = handle;
+        *kaw = ctrl->kaw;
+    }
+
+    return status;
+}
+
+esp_err_t pid_control_get_output_limits(pid_control_handle handle, float* u_min, float* u_max) {
+    esp_err_t status = ESP_OK;
+    if(handle == NULL || u_min == NULL || u_max == NULL) {
+        #if CONFIG_PID_CONTROL_LOGGING
+            ESP_LOGE(TAG, "Invalid argument: NULL pointer");
+        #endif
+        status = ESP_ERR_INVALID_ARG;
+    }
+
+    if(status == ESP_OK) {
+        struct pid_control* ctrl = handle;
+        *u_min = ctrl->u_min;
+        *u_max = ctrl->u_max;
+    }
+
+    return status;
+}
+
+esp_err_t pid_control_get_config(pid_control_handle handle, pid_control_config* config) {
+    esp_err_t status = ESP_OK;
+    if(handle == NULL || config == NULL) {
+        #if CONFIG_PID_CONTROL_LOGGING
+            ESP_LOGE(TAG, "Invalid argument: NULL pointer");
+        #endif
+        status = ESP_ERR_INVALID_ARG;
+    }
+
+    if(status == ESP_OK) {
+        struct pid_control* ctrl = handle;
+        config->kp = ctrl->kp;
+        config->ki = ctrl->ki;
+        config->kd = ctrl->kd;
+        config->kaw = ctrl->kaw;
+        config->u_min = ctrl->u_min;
+        config->u_max = ctrl->u_max;
+    }
+
+    return status;
+}
